@@ -1,0 +1,33 @@
+import requests
+
+url = f"https://restcountries.com/v3.1/name/{country}"
+
+def get_country_info(country):
+    response = requests.get(url)
+    if response.status_code == 200:
+        country_data = response.json()
+        if country_data:
+            country_info = country_data[0]
+            name = country_info.get('name', {}).get('common', 'N/A')
+            capital = country_info.get('capital', ['N/A'])[0]
+            region = country_info.get('region', 'N/A')
+            population = country_info.get('population', 'N/A')
+            area = country_info.get('area', 'N/A')
+            currencies = ', '.join([currency['name'] for currency in country_info.get('currencies', {}).values()])
+            languages = ', '.join(country_info.get('languages', {}).values())
+            
+            print(f"Country: {name}")
+            print(f"Capital: {capital}")
+            print(f"Region: {region}")
+            print(f"Population: {population}")
+            print(f"Area: {area} km²")
+            print(f"Currencies: {currencies}")
+            print(f"Languages: {languages}")
+        else:
+            print("Country not found.")
+
+while True:
+    country = input("Enter a country name (or type 'q' to quit): ")
+    if country.lower() == 'q':
+        break
+    get_country_info(country)
